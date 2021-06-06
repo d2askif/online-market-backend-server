@@ -48,6 +48,7 @@ function update(req, res, next) {
   const user = req.user;
   user.username = req.body.username;
   user.mobileNumber = req.body.mobileNumber;
+  user.email = req.body.email;
 
   user
     .save()

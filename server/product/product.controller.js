@@ -1,4 +1,4 @@
-const Product = require("./product.model");
+const { Product } = require("./product.model");
 
 /**
  * Load user and append to req.
@@ -29,7 +29,7 @@ function get(req, res) {
 function create(req, res, next) {
   const product = new Product({
     name: req.body.name,
-    price: req.body.mobileNumber,
+    price: req.body.price,
   });
 
   product

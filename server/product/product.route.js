@@ -11,7 +11,7 @@ router
   .get(productCtrl.list)
 
   /** POST /api/users - Create new user */
-  .post(validate(paramValidation.createUser), productCtrl.create);
+  .post(validate(paramValidation.createProduct), productCtrl.create);
 
 router
   .route("/:productId")
