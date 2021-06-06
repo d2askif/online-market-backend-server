@@ -42,4 +42,26 @@ module.exports = {
       qrCode: Joi.string(),
     },
   },
+  createOrder: {
+    body: {
+      product: Joi.array().items(
+        Joi.object({
+          name: Joi.string().required(),
+          price: Joi.number().required(),
+        })
+      ),
+      count: Joi.number().required(),
+      totalPrice: Joi.number().required(),
+      status: Joi.string()
+        .valid(
+          "active",
+          "processing",
+          "shipped",
+          "delivered",
+          "returned",
+          "canceled"
+        )
+        .required(),
+    },
+  },
 };
