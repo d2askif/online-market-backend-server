@@ -11,6 +11,7 @@
     "yarn": ">=1.5.1"
   },
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "node index.js",
     "start:debug": "cross-env DEBUG=express-mongoose-es6-rest-api:* yarn start",
     "lint": "esw *.js server config --color",
@@ -73,6 +74,7 @@
     "husky": "0.14.3",
     "istanbul": "1.1.0-alpha.1",
     "mocha": "3.5.0",
+    "nodemon": "^2.0.7",
     "supertest": "3.0.0",
     "supertest-as-promised": "4.0.2",
     "validate-commit-msg": "^2.14.0"
