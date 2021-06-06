@@ -1,20 +1,8 @@
-const User = require("./user.model");
-
-/**
- * Load user and append to req.
- */
-function load(req, res, next, id) {
-  User.get(id)
-    .then((user) => {
-      req.user = user; // eslint-disable-line no-param-reassign
-      return next();
-    })
-    .catch((e) => next(e));
-}
+const Order = require("./order.model");
 
 /**
  * Get user
- * @returns {User}
+ * @returns {Order}
  */
 function get(req, res) {
   return res.json(req.user);
@@ -24,17 +12,18 @@ function get(req, res) {
  * Create new user
  * @property {string} req.body.username - The username of user.
  * @property {string} req.body.mobileNumber - The mobileNumber of user.
- * @returns {User}
+ * @returns {Order}
  */
 function create(req, res, next) {
-  const user = new User({
-    username: req.body.username,
-    mobileNumber: req.body.mobileNumber,
+  const order = new Order({
+    product: req.body.product,
+    totalPrice: req.body.totalPrice,
+    count: req.body.count,
   });
 
-  user
+  order
     .save()
-    .then((savedUser) => res.json(savedUser))
+    .then((savedOrder) => res.json(savedOrder))
     .catch((e) => next(e));
 }
 
@@ -42,7 +31,7 @@ function create(req, res, next) {
  * Update existing user
  * @property {string} req.body.username - The username of user.
  * @property {string} req.body.mobileNumber - The mobileNumber of user.
- * @returns {User}
+ * @returns {Order}
  */
 function update(req, res, next) {
   const user = req.user;
@@ -51,7 +40,7 @@ function update(req, res, next) {
 
   user
     .save()
-    .then((savedUser) => res.json(savedUser))
+    .then((savedOrder) => res.json(savedOrder))
     .catch((e) => next(e));
 }
 
@@ -59,25 +48,25 @@ function update(req, res, next) {
  * Get user list.
  * @property {number} req.query.skip - Number of users to be skipped.
  * @property {number} req.query.limit - Limit number of users to be returned.
- * @returns {User[]}
+ * @returns {Order[]}
  */
 function list(req, res, next) {
   const { limit = 50, skip = 0 } = req.query;
-  User.list({ limit, skip })
+  Order.list({ limit, skip })
     .then((users) => res.json(users))
     .catch((e) => next(e));
 }
 
 /**
  * Delete user.
- * @returns {User}
+ * @returns {Order}
  */
 function remove(req, res, next) {
   const user = req.user;
   user
     .remove()
-    .then((deletedUser) => res.json(deletedUser))
+    .then((deletedOrder) => res.json(deletedOrder))
     .catch((e) => next(e));
 }
 
-module.exports = { load, get, create, update, list, remove };
+module.exports = { get, create, update, list, remove };

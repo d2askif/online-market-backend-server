@@ -1,12 +1,12 @@
-const User = require("./user.model");
+const Product = require("./product.model");
 
 /**
  * Load user and append to req.
  */
 function load(req, res, next, id) {
-  User.get(id)
-    .then((user) => {
-      req.user = user; // eslint-disable-line no-param-reassign
+  Product.get(id)
+    .then((product) => {
+      req.product = product; // eslint-disable-line no-param-reassign
       return next();
     })
     .catch((e) => next(e));
@@ -27,14 +27,14 @@ function get(req, res) {
  * @returns {User}
  */
 function create(req, res, next) {
-  const user = new User({
-    username: req.body.username,
-    mobileNumber: req.body.mobileNumber,
+  const product = new Product({
+    name: req.body.name,
+    price: req.body.mobileNumber,
   });
 
-  user
+  product
     .save()
-    .then((savedUser) => res.json(savedUser))
+    .then((prod) => res.json(prod))
     .catch((e) => next(e));
 }
 
@@ -45,13 +45,16 @@ function create(req, res, next) {
  * @returns {User}
  */
 function update(req, res, next) {
-  const user = req.user;
-  user.username = req.body.username;
-  user.mobileNumber = req.body.mobileNumber;
+  const product = req.product;
+  product.name = req.body.name;
+  product.price = req.body.price;
+  product.description = req.body.description;
+  product.weight = req.body.weight;
+  product.volume = req.body.volume;
 
-  user
+  product
     .save()
-    .then((savedUser) => res.json(savedUser))
+    .then((prod) => res.json(prod))
     .catch((e) => next(e));
 }
 
@@ -63,7 +66,7 @@ function update(req, res, next) {
  */
 function list(req, res, next) {
   const { limit = 50, skip = 0 } = req.query;
-  User.list({ limit, skip })
+  Product.list({ limit, skip })
     .then((users) => res.json(users))
     .catch((e) => next(e));
 }

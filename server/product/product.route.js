@@ -1,30 +1,30 @@
 const express = require("express");
 const validate = require("express-validation");
 const paramValidation = require("../../config/param-validation");
-const userCtrl = require("./user.controller");
+const productCtrl = require("./product.controller");
 
 const router = express.Router(); // eslint-disable-line new-cap
 
 router
   .route("/")
   /** GET /api/users - Get list of users */
-  .get(userCtrl.list)
+  .get(productCtrl.list)
 
   /** POST /api/users - Create new user */
-  .post(validate(paramValidation.createUser), userCtrl.create);
+  .post(validate(paramValidation.createUser), productCtrl.create);
 
 router
-  .route("/:userId")
+  .route("/:productId")
   /** GET /api/users/:userId - Get user */
-  .get(userCtrl.get)
+  .get(productCtrl.get)
 
   /** PUT /api/users/:userId - Update user */
-  .put(validate(paramValidation.updateUser), userCtrl.update)
+  .put(validate(paramValidation.updateUser), productCtrl.update)
 
   /** DELETE /api/users/:userId - Delete user */
-  .delete(userCtrl.remove);
+  .delete(productCtrl.remove);
 
 /** Load user when API with userId route parameter is hit */
-router.param("userId", userCtrl.load);
+router.param("productId", productCtrl.load);
 
 module.exports = router;
