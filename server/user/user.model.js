@@ -1,12 +1,11 @@
+/* eslint-disable consistent-return */
+/* eslint-disable func-names */
 const Promise = require("bluebird");
 const mongoose = require("mongoose");
 const httpStatus = require("http-status");
 const APIError = require("../helpers/APIError");
 const { OrderSchema } = require("../order/order.model.js");
-
-/**
- *Order Schema
- */
+const bcrypt = require("bcrypt");
 
 /**
  * User Schema
@@ -37,6 +36,35 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  password: {
+    type: String,
+    required: true,
+  },
+});
+
+UserSchema.pre("save", function (next) {
+  const user = this;
+  if (!user.isModified("password")) {
+    return next();
+  }
+
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) return next(err);
+    bcrypt.hash(user.password, salt, (er, hash) => {
+      if (er) return next(er);
+      user.password = hash;
+      next();
+    });
+  });
+});
+
+UserSchema.method("comparePassword", function (candidatePassword) {
+  return new Promise((resolve, rejects) => {
+    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+      if (err) return rejects(err);
+      resolve(isMatch);
+    });
+  });
 });
 
 /**

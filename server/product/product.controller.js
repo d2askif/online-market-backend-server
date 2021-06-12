@@ -16,8 +16,16 @@ function load(req, res, next, id) {
  * Get user
  * @returns {User}
  */
-function get(req, res) {
-  return res.json(req.user);
+function get(req, res, next) {
+  const { productId } = req.params;
+
+  Product.findById({ _id: productId })
+    .then((product) => {
+      res.json(product);
+    })
+    .catch((e) => {
+      next(e);
+    });
 }
 
 /**

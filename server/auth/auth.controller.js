@@ -1,12 +1,13 @@
-const jwt = require('jsonwebtoken');
-const httpStatus = require('http-status');
-const APIError = require('../helpers/APIError');
-const config = require('../../config/config');
+const jwt = require("jsonwebtoken");
+const httpStatus = require("http-status");
+const APIError = require("../helpers/APIError");
+const config = require("../../config/config");
+const User = require("../user/user.model");
 
 // sample user, used for authentication
 const user = {
-  username: 'react',
-  password: 'express'
+  username: "react",
+  password: "express",
 };
 
 /**
@@ -19,18 +20,43 @@ const user = {
 function login(req, res, next) {
   // Ideally you'll fetch this from the db
   // Idea here was to show how jwt works with simplicity
-  if (req.body.username === user.username && req.body.password === user.password) {
-    const token = jwt.sign({
-      username: user.username
-    }, config.jwtSecret);
+  if (
+    req.body.username === user.username &&
+    req.body.password === user.password
+  ) {
+    const token = jwt.sign(
+      {
+        username: user.username,
+      },
+      config.jwtSecret
+    );
     return res.json({
       token,
-      username: user.username
+      username: user.username,
     });
   }
 
-  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
+  const err = new APIError(
+    "Authentication error",
+    httpStatus.UNAUTHORIZED,
+    true
+  );
   return next(err);
+}
+
+/**
+ *  signup a user
+ */
+
+function signup(req, res, next) {
+  const { username, password, mobileNumber } = req.body;
+  const newUser = new User({ username, password, mobileNumber });
+  newUser
+    .save()
+    .then((doc) => {
+      res.json(doc);
+    })
+    .catch((e) => next(e));
 }
 
 /**
@@ -43,8 +69,8 @@ function getRandomNumber(req, res) {
   // req.user is assigned by jwt middleware if valid token is provided
   return res.json({
     user: req.user,
-    num: Math.random() * 100
+    num: Math.random() * 100,
   });
 }
 
-module.exports = { login, getRandomNumber };
+module.exports = { login, getRandomNumber, signup };

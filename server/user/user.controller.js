@@ -27,13 +27,10 @@ function get(req, res) {
  * @returns {User}
  */
 function create(req, res, next) {
-  const user = new User({
+  User.create({
     username: req.body.username,
     mobileNumber: req.body.mobileNumber,
-  });
-
-  user
-    .save()
+  })
     .then((savedUser) => res.json(savedUser))
     .catch((e) => next(e));
 }
